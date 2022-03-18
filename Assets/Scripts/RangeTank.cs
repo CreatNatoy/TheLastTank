@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RangeTank : ShootableTank
@@ -11,7 +9,8 @@ public class RangeTank : ShootableTank
     protected override void Start()
     {
         base.Start();
-        _target = GameObject.FindObjectOfType<Player>().transform; 
+        _target = GameObject.FindObjectOfType<Player>().transform;
+        LookPlayer(_target.position);
     }
 
     private void Update()

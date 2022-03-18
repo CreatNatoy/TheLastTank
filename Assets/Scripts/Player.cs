@@ -1,28 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement; 
 
 public class Player : ShootableTank
 {
+    [SerializeField] private GameObject _panelGameOver; 
     private float _timer;
 
-    public override void TakeDamage(int damage)
+    protected override void Start()
     {
-        _currentHealth -= damage;
-        _ui.UpdateHp(_currentHealth); 
-        if(_currentHealth <= 0 )
-        {
-            Stats.ResetAllStats();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
-        }
-    }
-
-    protected override void Move()
-    {
-      //  transform.Translate(Vector2.down * Input.GetAxis("Vertical") * _movementSpeed * Time.deltaTime); 
-       Vector2 direction = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        _rigidbody.velocity = direction.normalized * _movementSpeed;  // дает возможность двигатсья на искосок 
+        base.Start();
+        _ui.UpdateScoreAndLevel();
+        _ui.UpdateHp(_currentHealth);       
     }
 
     private void Update()
@@ -40,4 +27,23 @@ public class Player : ShootableTank
         else
             _timer -= Time.deltaTime; 
     }
+
+    public override void TakeDamage(int damage)
+    {
+        _currentHealth -= damage;
+        _ui.UpdateHp(_currentHealth); 
+        if(_currentHealth <= 0 )
+        {
+            Stats.ResetAllStats();
+            Time.timeScale = 0f; 
+            _panelGameOver.SetActive(true); 
+        }
+    }
+
+    protected override void Move()
+    {
+       Vector2 direction = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        _rigidbody.velocity = direction.normalized * _movementSpeed;
+    }
+
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MeleeTank : Tank
@@ -12,7 +10,8 @@ public class MeleeTank : Tank
     protected override void Start()
     {
         base.Start(); 
-        _target = GameObject.FindObjectOfType<Player>().transform; 
+        _target = GameObject.FindObjectOfType<Player>().transform;
+        LookPlayer(_target.position); 
     }
 
     private void Update()
@@ -22,7 +21,7 @@ public class MeleeTank : Tank
             if (_timer <= 0)
             {
                 Move();
-                SetAngle(_target.position); // поварачивает танка, к врагу и двигается в одном направлений 
+                SetAngle(_target.position);
             }
             else
             {
@@ -44,7 +43,4 @@ public class MeleeTank : Tank
             _timer = _hitCooldown; 
         }
     }
-
-
-
 }

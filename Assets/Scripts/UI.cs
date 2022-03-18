@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 
 public class UI : MonoBehaviour
 {
     [SerializeField] private Text _hpText;
     [SerializeField] private Text _levelText;
-    [SerializeField] private Text _scoreText; 
+    [SerializeField] private Text _scoreText;
 
     public void UpdateScoreAndLevel()
     {
@@ -17,7 +15,6 @@ public class UI : MonoBehaviour
 
     public void UpdateHp(int hp)
     {
-        _hpText.text = $"HP: {hp}"; 
-
+        _hpText.text = $"HP: {hp}";
     }
 }

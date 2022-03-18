@@ -1,22 +1,21 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ObjectPooler : MonoBehaviour
 {
-    [System.Serializable] // показывает класс в юнити 
+    [System.Serializable]
     public class Pool
     {
         public string tag;
         public GameObject prefab;
-        public int size; 
+        public int size;
     }
 
     public static ObjectPooler Instance;
 
     public void Awake()
     {
-        Instance = this; // даем ссылку на этот объект 
+        Instance = this;
     }
 
     public List<Pool> pools;
@@ -24,41 +23,35 @@ public class ObjectPooler : MonoBehaviour
 
     private void Start()
     {
-        //Класс Queue<T> представляет обычную очередь, работающую по алгоритму FIFO ("первый вошел - первый вышел").
-        poolDictionary = new Dictionary<string, Queue<GameObject>>();  // Queue тип очереди 
+        poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
-        foreach (Pool pool in pools) // создаем все префабы что имеем
+        foreach (Pool pool in pools)
         {
-            Queue<GameObject> objectPool = new Queue<GameObject>(); 
+            Queue<GameObject> objectPool = new Queue<GameObject>();
 
-            for(int i=0; i < pool.size; i++) // создаем их количество что указано в инспекторе 
+            for (int i = 0; i < pool.size; i++)
             {
                 GameObject obj = Instantiate(pool.prefab);
                 obj.SetActive(false);
-                objectPool.Enqueue(obj); 
+                objectPool.Enqueue(obj);
             }
 
-            poolDictionary.Add(pool.tag, objectPool);  // добавляем их (ключ шоб найти можно было, сам объект) 
+            poolDictionary.Add(pool.tag, objectPool);
         }
     }
 
-//   Dequeue: извлекает и возвращает первый элемент очереди
-//    Enqueue: добавляет элемент в конец очереди
-//    Peek: просто возвращает первый элемент из начала очереди без его удаления
-
     public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
     {
-        if (!poolDictionary.ContainsKey(tag)) // если ключ не верный то выходим 
+        if (!poolDictionary.ContainsKey(tag))
             return null;
 
-        GameObject objectToSpawn = poolDictionary[tag].Dequeue(); // получаем объект 
-        // вызываем его 
+        GameObject objectToSpawn = poolDictionary[tag].Dequeue();
         objectToSpawn.SetActive(true);
         objectToSpawn.transform.position = position;
         objectToSpawn.transform.rotation = rotation;
 
-        poolDictionary[tag].Enqueue(objectToSpawn); // добавляем его в конец очереди . т.к использован уже 
+        poolDictionary[tag].Enqueue(objectToSpawn);
 
-        return objectToSpawn; 
+        return objectToSpawn;
     }
 }
